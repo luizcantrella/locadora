@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class Main {
 
     public static void main(String[] args) {
-        String config = "veiculo";
+        String config = "vinil";
         LocadoraFabrica fabrica;
         switch (config) {
             case "veiculo": {
@@ -26,34 +26,6 @@ public class Main {
             default:
                 fabrica = LocadoraDeVeiculoFabrica.getInstance();
         }
-        /**
-
-        LocadoraDeVeiculoFachada lvf = new LocadoraDeVeiculoFachada();
-        lvf.instanciarObjetos();
-
-        Locacao locacao = lvf.locar(1L, 1L);
-        System.out.println("\nLocação criada com as seguintes informações:");
-        System.out.println("- Id: " + locacao.getId());
-        System.out.println("- Data de início: " + locacao.getInicio());
-        System.out.println("- Paga: " + (locacao.getPaga() ? "Sim" : "Não"));
-
-         */
-
-        /*
-        LocadoraDeVinilFachada lvf = new LocadoraDeVinilFachada();
-        lvf.instanciarObjetos();
-        Locacao locacao = lvf.locar(1L, 1L);
-        System.out.println("\nLocação criada com as seguintes informações:");
-        System.out.println("- Id: " + locacao.getId());
-        System.out.println("- Data de início: " + locacao.getInicio());
-        System.out.println("- Vinil locado: " + ((Vinil) locacao.getLocavel()).getTitulo() );
-        System.out.println("- Paga: " + (locacao.getPaga() ? "Sim" : "Não"));
-
-        HashMap<String, Object> infoAdicionais = new HashMap<>();
-        infoAdicionais.put("danificado", false);
-        lvf.devolver(locacao,infoAdicionais);
-        System.out.println("- Valor da locação: " + locacao.valor());
-         */
 
         LocadoraFachada fachada = fabrica.criarFachada();
         fachada.instanciarObjetos();
@@ -67,8 +39,12 @@ public class Main {
         // devolver
         HashMap<String, Object> infoAdicionais = new HashMap<>();
 
-        infoAdicionais.put("kmAtual", 100L); //infoVeiculo
-        //infoAdicionais.put("danificado", true);//infoVinil
+        if (config == "veiculo") {
+            infoAdicionais.put("kmAtual", 100L);
+        }
+        if (config == "vinil") {
+            infoAdicionais.put("danificado", true);
+        }
         fachada.devolver(locacao, infoAdicionais);
         System.out.println("- Divida: " + locacao.getLocatario().divida());
 
@@ -77,13 +53,15 @@ public class Main {
         locacao.setPaga(true);
         System.out.println("- Divida: " + locacao.getLocatario().divida());
 
-        // cadastrar locatarioDeVinil
+        // cadastrar locatario
         Locatario locatario = fabrica.criarLocatario();
         HashMap<String, String> atributosLocatario = new HashMap<>();
-        atributosLocatario.put("cpf", "111.111.111-11");
+        if ( config == "vinil") {
+            atributosLocatario.put("cpf", "111.111.111-11");
+        }
         fachada.salvarLocatario(locatario,"Gabriel Cantrella", 2L, atributosLocatario);
 
-        System.out.println(LocadoraFachada.getLocatarios());
         LocadoraFachada.getLocatarios().forEach( (index, it) -> System.out.println(it.getNome()));
 	}
+
 }
